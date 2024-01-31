@@ -7,7 +7,7 @@ import { IERC3156FlashBorrower } from "@openzeppelin/contracts/interfaces/IERC31
 import "../interfaces/IVineCore.sol";
 
 /**
-    @title Vine Debt Token "acUSD"
+    @title Vine Debt Token "vUSD"
     @notice CDP minted against collateral deposits within `TroveManager`.
             This contract has a 1:n relationship with multiple deployments of `TroveManager`,
             each of which hold one collateral type which may be used to mint this token.
