@@ -2,9 +2,9 @@
 
 pragma solidity ^0.8.19;
 
-import { IERC20, ERC20 } from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import { IERC3156FlashBorrower } from "@openzeppelin/contracts/interfaces/IERC3156FlashBorrower.sol";
 import "../interfaces/IVineCore.sol";
+import "../dependencies/ERC20.sol";
 
 /**
     @title Vine Debt Token "vUSD"
