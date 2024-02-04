@@ -698,7 +698,7 @@ contract TroveManager is VineBase, VineOwnable, SystemStart {
         uint256 _MCR = MCR;
         require(IBorrowerOperations(borrowerOperationsAddress).getTCR() >= _MCR, "CM");
         require(_debtAmount > 0, "Az");
-        require(debtToken.balanceOf(msg.sender) >= _debtAmount, "IB");
+        require(debtToken.checkBalanceOf(msg.sender) >= _debtAmount, "IB");
         _updateBalances();
         totals.totalDebtSupplyAtStart = getEntireSystemDebt();
 
