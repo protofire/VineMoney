@@ -53,7 +53,7 @@ contract DebtToken is ERC20 {
         string memory _symbol,
         IVineCore vineCore_,
         uint256 _gasCompensation
-    ) ERC20(_name, _symbol) {
+    ) ERC20(address(vineCore_), _name, _symbol) {
         _vineCore = vineCore_;
         DEBT_GAS_COMPENSATION = _gasCompensation;
         bytes32 hashedName = keccak256(bytes(_name));
