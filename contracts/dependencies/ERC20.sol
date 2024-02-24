@@ -121,9 +121,8 @@ abstract contract ERC20 is Context, IERC20Metadata, IERC20Errors, VineSignature,
         return _balances[account];
     }
 
-    function checkBalanceOf(SignIn calldata auth, address account) authenticated(auth) external view returns (uint256) {
-        require(lookers[msg.sender], "NA");
-        return _balances[account];
+    function checkBalanceOf(SignIn calldata auth) authenticated(auth) external view returns (uint256) {
+        return _balances[auth.user];
     }
 
     /**
