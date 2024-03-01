@@ -10,8 +10,6 @@ contract TokenVesting is VineOwnable {
     IERC20 public immutable VINE;
 
     mapping(address => UnlockingRules) public UnlockingInfo;
-    uint256 public duration;
-    uint256 public unlockingStartTime;
 
     event SetUnlockingRule(
         address indexed _addr,
