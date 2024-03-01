@@ -145,6 +145,10 @@ contract StabilityPool is VineOwnable, SystemStart {
         periodFinish = uint32(block.timestamp - 1);
     }
 
+    receive() payable external {
+
+    }
+
     function setInitialParameters(
         IVineVault _vault,
         address _liquidationManager) external {
@@ -718,7 +722,11 @@ contract StabilityPool is VineOwnable, SystemStart {
             if (gains > 0) {
                 collateralGains[collateralIndex] = gains;
                 depositorGains[collateralIndex] = 0;
-                collateralTokens[collateralIndex].safeTransfer(recipient, gains);
+                if(address(collateralTokens[collateralIndex]) == 0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE) {
+                    payable(recipient).transfer(gains);
+                } else {
+                    collateralTokens[collateralIndex].safeTransfer(recipient, gains);
+                }
             }
             unchecked {
                 ++i;
