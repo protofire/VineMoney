@@ -20,9 +20,11 @@ contract IDOTokenVesting is VineOwnable {
     );
 
 
-    constructor(address _vineCore, address _vault, IERC20 _VINE) VineOwnable(_vineCore) {
+    constructor(address _vineCore, address _vault, IERC20 _VINE, uint256 _unlockingStartTime, uint256 _duration) VineOwnable(_vineCore) {
         vault = _vault;
         VINE = _VINE;
+        unlockingStartTime = _unlockingStartTime;
+        duration = _duration;
     }
 
     struct UnlockingRules {
