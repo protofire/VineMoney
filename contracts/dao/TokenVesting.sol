@@ -5,7 +5,7 @@ pragma solidity ^0.8.19;
 import "../dependencies/VineOwnable.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
-contract TokenUnlocking is VineOwnable {
+contract TokenVesting is VineOwnable {
     address public immutable vault;
     IERC20 public immutable VINE;
 
