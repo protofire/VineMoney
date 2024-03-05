@@ -10,8 +10,6 @@ import "../dependencies/VineOwnable.sol";
     @title Vine Multi Token Price Feed
     @notice Based on Gravita's PriceFeed:
             https://github.com/Gravita-Protocol/Gravita-SmartContracts/blob/9b69d555f3567622b0f84df8c7f1bb5cd9323573/contracts/PriceFeed.sol
-
-            Vine's implementation additionally caches price values within a block and incorporates exchange rate settings for derivative tokens (e.g. stETH -> wstETH).
  */
 contract PriceFeed is VineOwnable {
     struct OracleRecord {

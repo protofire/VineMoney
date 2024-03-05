@@ -265,4 +265,5 @@ contract DebtToken is ERC20 {
             "Debt: Cannot transfer tokens directly to the StabilityPool, TroveManager or BorrowerOps"
         );
     }
+
 }

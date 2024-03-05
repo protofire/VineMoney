@@ -65,7 +65,7 @@ contract IncentiveVoting is DelegatedOps, SystemStart {
 
     uint32 public totalDecayRate;
     uint16 public totalUpdatedWeek;
-    uint40[65535] totalWeeklyWeights;
+    uint40[65535] public totalWeeklyWeights;
     uint32[65535] public totalWeeklyUnlocks;
 
     // emitted each time an account's lock weight is registered
@@ -198,7 +198,7 @@ contract IncentiveVoting is DelegatedOps, SystemStart {
 
         return weight;
     }
-
+    
     function getReceiverVotePct(uint256 id, uint256 week) external returns (uint256) {
         week -= 1;
         getReceiverWeightWrite(id);
@@ -533,6 +533,7 @@ contract IncentiveVoting is DelegatedOps, SystemStart {
             for (uint256 x = 0; x < lockLength; x++) {
                 uint256 weeksToUnlock = lockData[x].weeksToUnlock;
                 uint256 amount = (lockData[x].amount * points) / MAX_POINTS;
+
                 receiverWeeklyUnlocks[id][systemWeek + weeksToUnlock] += uint32(amount);
 
                 weeklyUnlocks[weeksToUnlock] += uint32(amount);
@@ -545,6 +546,7 @@ contract IncentiveVoting is DelegatedOps, SystemStart {
             totalWeight += weight;
             totalDecay += decayRate;
         }
+
 
         for (uint256 i = 0; i < lockLength; i++) {
             uint256 weeksToUnlock = lockData[i].weeksToUnlock;

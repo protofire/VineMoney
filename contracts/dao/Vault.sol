@@ -151,7 +151,7 @@ contract VineVault is VineOwnable, SystemStart {
             address receiver = initialAllowances[i].receiver;
             totalAllocated += amount;
             // initial allocations are given as approvals
-            vineToken.increaseAllowance(receiver, amount);
+            vineToken.approve(receiver, amount);
         }
 
         unallocatedTotal = uint128(totalSupply - totalAllocated);
@@ -289,16 +289,19 @@ contract VineVault is VineOwnable, SystemStart {
         Receiver memory receiver = idToReceiver[id];
         require(receiver.account == msg.sender, "Receiver not registered");
         uint256 week = receiverUpdatedWeek[id];
+
         uint256 currentWeek = getWeek();
         if (week == currentWeek) return 0;
 
         IEmissionSchedule _emissionSchedule = emissionSchedule;
         _allocateTotalWeekly(_emissionSchedule, currentWeek);
 
+
         if (address(_emissionSchedule) == address(0)) {
             receiverUpdatedWeek[id] = uint16(currentWeek);
             return 0;
         }
+
 
         uint256 amount;
         while (week < currentWeek) {

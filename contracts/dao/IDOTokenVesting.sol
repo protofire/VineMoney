@@ -42,7 +42,7 @@ contract IDOTokenVesting is VineOwnable {
         require(_addrs.length == _totalLockeds.length);
         for (uint256 i = 0; i < _addrs.length; i++) {
             require(
-                UnlockingInfo[_addrs[i]].lastUnlockingTime == 0,
+                UnlockingInfo[_addrs[i]].totalLocked == 0,
                 "The rule has already been set."
             );
             UnlockingInfo[_addrs[i]].totalLocked = _totalLockeds[i];

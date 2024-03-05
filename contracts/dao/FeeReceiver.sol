@@ -17,4 +17,12 @@ contract FeeReceiver is VineOwnable {
     function setTokenApproval(IERC20 token, address spender, uint256 amount) external onlyOwner {
         token.forceApprove(spender, amount);
     }
+
+    function transferRose(address receiver, uint256 amount) external onlyOwner {
+        payable(receiver).transfer(amount);
+    }
+
+    receive() payable external {
+
+    }
 }

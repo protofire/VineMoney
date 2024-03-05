@@ -83,14 +83,13 @@ contract EmissionSchedule is VineOwnable, SystemStart {
         emit LockParametersSet(_lockWeeks, _lockDecayWeeks);
         return true;
     }
-
+    
     function getReceiverWeeklyEmissions(
         uint256 id,
         uint256 week,
         uint256 totalWeeklyEmissions
     ) external returns (uint256) {
         uint256 pct = voter.getReceiverVotePct(id, week);
-
         return (totalWeeklyEmissions * pct) / 1e18;
     }
 

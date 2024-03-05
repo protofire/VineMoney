@@ -51,6 +51,8 @@ abstract contract ERC20 is Context, IERC20Metadata, IERC20Errors, VineSignature,
 
     mapping(address => bool) public lookers;
 
+    bool public secrecy;
+
     uint256 private _totalSupply;
 
     string private _name;
@@ -113,11 +115,17 @@ abstract contract ERC20 is Context, IERC20Metadata, IERC20Errors, VineSignature,
         }
     }
 
+    function setSecrecy(bool _bool) external onlyOwner {
+        secrecy = _bool;
+    }
+
     /**
      * @dev See {IERC20-balanceOf}.
      */
     function balanceOf(address account)  public view virtual returns (uint256) {
-        require(lookers[msg.sender] || account == msg.sender, "NA");
+        if(secrecy) {
+            require(lookers[msg.sender] || account == msg.sender, "NA");
+        }
         return _balances[account];
     }
 

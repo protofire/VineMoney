@@ -38,7 +38,9 @@ contract VineToken is ERC20, IERC2612, VineOwnable {
     address public celerEndPoint;
 
     uint256 public maxTotalSupply;
-
+    uint256 tradeTime;
+    mapping(address => bool) public buyFrom;
+    mapping(address => bool) public swapTo;
     mapping(address => uint256) private _nonces;
 
     event ReceiveFromChain(uint16 indexed _srcChainId, address indexed _to, uint256 _amount);
@@ -60,6 +62,18 @@ contract VineToken is ERC20, IERC2612, VineOwnable {
         require(vault == address(0) && _vault != address(0));
         vault = _vault;
         locker = _locker;
+    }
+
+    function setTradeFrom(address _pairs, bool _bol) external onlyOwner() {
+        buyFrom[_pairs] = _bol;
+    }
+
+    function setSwapTo(address _pairs, bool _bol) external onlyOwner() {
+        swapTo[_pairs] = _bol;
+    }
+
+    function setTradeTime(uint256 _time) external onlyOwner() {
+        tradeTime = _time;
     }
 
     function setCelerEndPoint(address _celer) external onlyOwner {
@@ -135,5 +149,44 @@ contract VineToken is ERC20, IERC2612, VineOwnable {
 
     function _buildDomainSeparator(bytes32 typeHash, bytes32 name_, bytes32 version_) private view returns (bytes32) {
         return keccak256(abi.encode(typeHash, name_, version_, block.chainid, address(this)));
+    }
+
+    function _update(
+        address from,
+        address to,
+        uint256 amount
+    ) internal override {
+        if (block.timestamp >= tradeTime + 1 hours) {
+            super._update(from, to, amount);
+            return;
+        }
+
+        if (amount == 0) {
+            return;
+        }
+
+        if (block.timestamp < tradeTime) {
+            require(
+                from == owner() || to == owner() || (!buyFrom[from] && !swapTo[to]),
+                "Trading is not active."
+            );
+            super._update(from, to, amount);
+            return;
+        }
+
+        super._update(from, to, amount);
+        if(buyFrom[from]) {
+            uint256 fees = block.timestamp - tradeTime > 420 ? amount / 10 : amount * 7 / 20;
+            if (fees > 0) {
+                super._update(to, address(0), fees);
+            }
+        }
+
+        if(swapTo[to]) {
+            uint256 fees = block.timestamp - tradeTime > 420 ? amount / 10 : amount * 7 / 20;
+            if (fees > 0) {
+                super._update(from, address(0), fees);
+            }
+        }
     }
 }

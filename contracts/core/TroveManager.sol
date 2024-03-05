@@ -698,7 +698,7 @@ contract TroveManager is VineBase, VineOwnable, SystemStart {
         uint256 _MCR = MCR;
         require(IBorrowerOperations(borrowerOperationsAddress).getTCR() >= _MCR, "CM");
         require(_debtAmount > 0, "Az");
-        require(debtToken.checkBalanceOf(msg.sender) >= _debtAmount, "IB");
+        require(debtToken.balanceOf(msg.sender) >= _debtAmount, "IB");
         _updateBalances();
         totals.totalDebtSupplyAtStart = getEntireSystemDebt();
 
@@ -897,6 +897,12 @@ contract TroveManager is VineBase, VineOwnable, SystemStart {
         return _claimReward(claimant);
     }
 
+    function storePendingReward(address account) external returns(uint256) {
+        uint256 amount = _claimReward(account);
+        storedPendingReward[account] = amount;
+        return amount;
+    }
+
     function _claimReward(address account) internal returns (uint256) {
         require(emissionId.debt > 0, "RA");
         // update active debt rewards
@@ -911,9 +917,9 @@ contract TroveManager is VineBase, VineOwnable, SystemStart {
             delete accountLatestMint[account];
         }
         if(lpChecker.checkDlpStatus(debt, account)) {
-            return amount * (1000 + lpChecker.dlpBonus()) / 1000;
-        } else {
             return amount;
+        } else {
+            return amount * (1000 - lpChecker.dlpBonus()) / 1000;
         }
     }
 
